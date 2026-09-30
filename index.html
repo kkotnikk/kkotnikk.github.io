@@ -135,6 +135,8 @@
     .reviews-list .review-card:last-child:nth-child(odd){grid-column:1/-1;min-height:190px}.review-demo-note{display:block;margin-top:22px;color:var(--muted);font:500 .72rem var(--font-mono);letter-spacing:.08em;text-transform:uppercase}
     @media(max-width:850px){.reviews{padding-top:85px;padding-bottom:85px}.reviews-heading{align-items:start;flex-direction:column;gap:14px}.reviews-layout{grid-template-columns:1fr}.rating-summary{min-height:235px}.reviews-list{min-height:220px}}
     @media(max-width:600px){.reviews{padding-top:76px;padding-bottom:76px}.reviews-list{grid-template-columns:1fr}.reviews-empty{padding:28px;min-height:225px}.review-card{min-height:215px}.rating-summary{padding:26px}.nav .nav-link[href="#sobre"]{display:none}}
+    @media(max-width:850px){.hero-side{overflow:hidden}.hero-side .cable-svg,.hero-side .card-eyelet{display:none}.swing-hint .hint-desktop{display:none}}
+    @media(min-width:851px){.swing-hint .hint-mobile{display:none}}
     @media(max-width:390px){.nav .nav-link[href="#sobre"]{display:none!important}.nav .nav-link[href="#avaliacoes"]{display:inline-flex!important}}
     @media(max-width:600px){.opening-title{font-size:clamp(2.1rem,8.5vw,3.4rem)}.opening-skip{font-size:.7rem}}
   </style>
@@ -161,7 +163,7 @@
         <p class="hero-lead">Desenvolvo ferramentas web que simplificam rotinas e transformam problemas reais em soluções fáceis de usar.</p>
         <div class="actions"><a class="btn btn-primary" href="#projeto">Ver projetos</a><a class="btn btn-outline" href="#contato">Fale comigo</a></div>
       </div>
-      <div class="hero-side" aria-label="Card interativo de João Kotnik"><svg class="cable-svg" aria-hidden="true"><path class="cable-shadow"></path><path class="cable-jacket"></path><path class="cable-highlight"></path><path class="cable-signal"></path></svg><div class="swing-card" id="pendulum" tabindex="0" role="img" aria-label="Card João Kotnik suspenso por um cabo flexível. Arraste, estique e solte para balançar; use as setas pelo teclado."><span class="card-eyelet" aria-hidden="true"></span><div class="identity-frame"><span class="identity-mark" aria-hidden="true">JK</span><div class="identity-caption"><span>João Kotnik</span><span>Web developer</span></div></div></div><span class="orbit-note">Criando para pessoas</span><span class="swing-hint">Arraste, estique e solte</span></div>
+      <div class="hero-side" aria-label="Card interativo de João Kotnik"><svg class="cable-svg" aria-hidden="true"><path class="cable-shadow"></path><path class="cable-jacket"></path><path class="cable-highlight"></path><path class="cable-signal"></path></svg><div class="swing-card" id="pendulum" tabindex="0" role="img" aria-label="Card João Kotnik suspenso por um cabo flexível. Arraste, estique e solte para balançar; use as setas pelo teclado."><span class="card-eyelet" aria-hidden="true"></span><div class="identity-frame"><span class="identity-mark" aria-hidden="true">JK</span><div class="identity-caption"><span>João Kotnik</span><span>Web developer</span></div></div></div><span class="orbit-note">Criando para pessoas</span><span class="swing-hint"><span class="hint-desktop">Arraste, estique e solte</span><span class="hint-mobile">Toque e arraste</span></span></div>
       <a class="hero-scroll" href="#projeto">Role para explorar</a>
     </section>
     <div class="ticker"><div class="container ticker-inner"><span>Desenvolvimento web <b>✳</b></span><span>Interfaces responsivas <b>✳</b></span><span>Sistemas para operações</span></div></div>
@@ -430,6 +432,10 @@
     const pendulum = document.getElementById('pendulum');
     const swingArea = pendulum.parentElement;
     const ropePaths = [...swingArea.querySelectorAll('.cable-svg path')];
+    const mobileMotion = () => window.matchMedia('(max-width:850px)').matches;
+    const updateCardLabel = () => pendulum.setAttribute('aria-label', mobileMotion()
+      ? 'Card João Kotnik flutuando livremente. Toque e arraste; use as setas pelo teclado.'
+      : 'Card João Kotnik suspenso por um cabo flexível. Arraste, estique e solte para balançar; use as setas pelo teclado.');
     const anchorPageY = -36;
     let ropeDrop = swingArea.getBoundingClientRect().top + window.scrollY - anchorPageY;
     let restLength = ropeDrop + (window.matchMedia('(max-width:850px)').matches ? 75 : 110);
@@ -497,8 +503,9 @@
       }
     }
     function renderSwing() {
+      const isMobile = mobileMotion();
       const distance = Math.max(1, Math.hypot(body.x, body.y));
-      const strain = dragging ? clamp((distance - maxRopeLength) / elasticStretch, 0, 1) : 0;
+      const strain = !isMobile && dragging ? clamp((distance - maxRopeLength) / elasticStretch, 0, 1) : 0;
       swingArea.classList.toggle('cable-at-limit', strain > 0);
       const normalX = -body.y / distance, normalY = body.x / distance;
       const shake = Math.sqrt(strain);
@@ -506,6 +513,7 @@
       pendulum.style.setProperty('--x', `${body.x + normalX * cardTremor}px`);
       pendulum.style.setProperty('--y', `${body.y - ropeDrop + normalY * cardTremor}px`);
       pendulum.style.setProperty('--angle', `${(body.angle + .0025 * shake * Math.sin(ropePhase + .8)) * 180 / Math.PI}deg`);
+      if (isMobile) return;
       const centerX = swingArea.clientWidth / 2;
       const points = ropeNodes.map((node, index) => {
         const envelope = Math.sin(Math.PI * index / ropeSegments);
@@ -544,9 +552,24 @@
       const dt = elapsed / steps;
       for (let i = 0; i < steps; i++) {
         ropePhase += dt * 52;
-        stepRope(dt);
+        if (!mobileMotion()) stepRope(dt);
         if (dragging) continue;
         windClock += dt;
+        if (mobileMotion()) {
+          const breeze = 20 * Math.sin(windClock * .8) + 9 * Math.sin(windClock * 1.37);
+          body.vx += (-3.2 * body.x + breeze - 2.1 * body.vx) * dt;
+          body.vy += (4.2 * (ropeDrop + 72 - body.y) + 13 * Math.sin(windClock * .65) - 2.3 * body.vy) * dt;
+          body.x += body.vx * dt;
+          body.y += body.vy * dt;
+          const cardWidth = pendulum.offsetWidth, cardHeight = cardWidth * 1.25;
+          const sideRoom = Math.max(0, (swingArea.clientWidth - cardWidth) / 2 - 8);
+          const lowerY = ropeDrop + Math.max(12, swingArea.clientHeight - cardHeight - 35);
+          body.x = clamp(body.x, -sideRoom, sideRoom);
+          body.y = clamp(body.y, ropeDrop + 12, lowerY);
+          body.spin += (7 * (.035 * Math.sin(windClock * .7) - body.angle) - 3 * body.spin) * dt;
+          body.angle += body.spin * dt;
+          continue;
+        }
         // Slow overlapping breezes and intermittent gusts avoid a metronomic sway.
         const gust = Math.pow(Math.max(0, Math.sin(windClock * .24 + .8)), 3);
         const wind = 25 * Math.sin(windClock * .52) + 9 * Math.sin(windClock * 1.13 + .9) + 22 * gust * Math.sin(windClock * 1.7 + .2);
@@ -584,8 +607,9 @@
     document.addEventListener('portfolio:reveal-card', () => {
       if (!cardIntroPending) return;
       cardIntroPending = false;
-      cardDropping = true;
-      body.vx = 95;
+      cardDropping = !mobileMotion();
+      if (mobileMotion()) {body.x = -20; body.y = ropeDrop + 18;}
+      body.vx = mobileMotion() ? 28 : 95;
       body.vy = 35;
       body.spin = -.45;
       renderSwing();
@@ -624,9 +648,15 @@
       let targetX = event.clientX - point.x - (cosine * grabLocalX - sine * grabLocalY);
       let targetY = event.clientY - point.y - (sine * grabLocalX + cosine * grabLocalY);
       const reach = Math.hypot(targetX, targetY);
-      if (reach > maxRopeLength + elasticStretch) {
+      if (!mobileMotion() && reach > maxRopeLength + elasticStretch) {
         targetX *= (maxRopeLength + elasticStretch) / reach;
         targetY *= (maxRopeLength + elasticStretch) / reach;
+      }
+      if (mobileMotion()) {
+        const cardWidth = pendulum.offsetWidth, cardHeight = cardWidth * 1.25;
+        const sideRoom = Math.max(0, (swingArea.clientWidth - cardWidth) / 2 - 8);
+        targetX = clamp(targetX, -sideRoom, sideRoom);
+        targetY = clamp(targetY, ropeDrop + 12, ropeDrop + Math.max(12, swingArea.clientHeight - cardHeight - 35));
       }
       body.vx = clamp((targetX - previousX) / dt, -1300, 1300);
       body.vy = clamp((targetY - previousY) / dt, -1300, 1300);
@@ -676,8 +706,10 @@
       gravity = 325 * restLength / 110;
       stiffness = gravity / 16.25;
       ropeDamping = 4.2 * Math.sqrt(restLength / 110);
+      updateCardLabel();
       renderSwing();
     });
+    updateCardLabel();
     renderSwing();
     document.addEventListener('visibilitychange', () => {if (document.hidden) pauseSwing(); else resumeSwing()});
     resumeSwing();
