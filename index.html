@@ -157,7 +157,8 @@
 
     /* The artwork spans the viewport while content keeps its original alignment. */
     .hero{width:100%;max-width:none;padding-left:max(24px,calc((100% - var(--max))/2));padding-right:max(24px,calc((100% - var(--max))/2))}
-    .hero h1{line-height:.97;letter-spacing:-.012em;margin-bottom:54px}
+    .hero h1{font-size:clamp(5rem,8.5vw,9rem);line-height:.97;letter-spacing:-.012em;margin-bottom:54px}
+    .hero>div:first-child{position:relative;z-index:2}
     .hero h1 em:after{bottom:-.09em}
     .hero-lead{max-width:540px;line-height:1.68;letter-spacing:0;margin-bottom:32px}
     .portfolio-intro h2,.section-head h2,.reviews-heading h2,.contact h2{line-height:1.02;letter-spacing:-.01em}
