@@ -137,7 +137,7 @@
     @media(max-width:600px){.reviews{padding-top:76px;padding-bottom:76px}.reviews-list{grid-template-columns:1fr}.reviews-empty{padding:28px;min-height:225px}.review-card{min-height:215px}.rating-summary{padding:26px}.nav .nav-link[href="#sobre"]{display:none}}
     @media(max-width:850px){.hero-side{overflow:hidden}.hero-side .cable-svg,.hero-side .card-eyelet{display:none}.swing-hint .hint-desktop{display:none}}
     @media(min-width:851px){.swing-hint .hint-mobile{display:none}}
-    @media(max-width:390px){.nav .nav-link[href="#sobre"]{display:none!important}.nav .nav-link[href="#avaliacoes"]{display:inline-flex!important}}
+    @media(max-width:390px){.nav .nav-link[href="#sobre"]{display:none!important}.nav .nav-link[href="#destaques"]{display:inline-flex!important}}
     @media(max-width:600px){.opening-title{font-size:clamp(2.1rem,8.5vw,3.4rem)}.opening-skip{font-size:.7rem}}
 
     /* Identidade Kotnik Studio: preto, branco, ciano e tipografia editorial. */
@@ -216,6 +216,29 @@
     .identity-logo{width:76%;filter:brightness(.81)}
     .identity-caption{bottom:19px;left:22px;right:22px;color:#6ca8b6;letter-spacing:.045em}
     @media(max-width:600px){.identity-art{inset:22px 18px 47px}.identity-caption{left:18px;right:18px;bottom:17px}}
+
+    /* Project highlights */
+    .project-highlights{border-top:1px solid var(--line)}
+    .highlights-heading{display:flex;justify-content:space-between;align-items:end;gap:32px;margin-bottom:36px}
+    .highlights-heading h2{font-family:var(--font-display);font-size:clamp(3.5rem,7vw,7rem);font-weight:900;text-transform:uppercase;letter-spacing:-.01em;line-height:1.02;margin:12px 0 0}
+    .highlights-heading p{max-width:340px;color:var(--muted);line-height:1.65;margin:0}
+    .highlights-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+    .highlight-card{padding:28px;display:flex;flex-direction:column;border:1px solid #27414b;background:#0b151a;border-radius:14px;transition:transform .35s ease,border-color .35s ease}
+    .highlight-card:hover{transform:translateY(-4px);border-color:var(--detail)}
+    .highlight-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:24px;border-bottom:1px solid var(--line);margin-bottom:26px}
+    .highlight-number{font-family:var(--font-display);font-size:2.7rem;line-height:1;color:var(--detail)}
+    .highlight-kind,.highlight-project{font:500 .72rem var(--font-mono);letter-spacing:.07em;line-height:1.5}
+    .highlight-kind{color:var(--muted);text-align:right}
+    .highlight-project{color:var(--detail);margin-bottom:12px}
+    .highlight-card h3{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(1.8rem,2.6vw,2.6rem);line-height:1.1;letter-spacing:0;margin:0 0 18px}
+    .highlight-card p{font-size:.98rem;line-height:1.7;color:var(--muted);margin:0 0 24px}
+    .highlight-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;margin-bottom:26px}
+    .highlight-tags span{font:500 .68rem var(--font-mono);line-height:1.5;padding:6px 9px;border:1px solid #27414b;border-radius:5px;color:#b9c9ce}
+    .highlight-card a{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid var(--line);padding-top:18px;font-size:.9rem;font-weight:600;color:var(--text);text-decoration:none}
+    .highlight-card a:hover{color:var(--detail)}
+    .highlight-card a:focus-visible{outline:2px solid var(--detail);outline-offset:6px}
+    @media(max-width:900px){.highlights-grid{grid-template-columns:1fr}.highlight-card{padding:26px}.highlights-heading{align-items:start;flex-direction:column;gap:18px}.highlights-heading p{max-width:500px}.highlight-card h3{font-size:2.3rem}}
+    @media(prefers-reduced-motion:reduce){.highlight-card{transition:none}.highlight-card:hover{transform:none}}
   </style>
 </head>
 <body>
@@ -227,7 +250,7 @@
       <nav class="nav" aria-label="Navegação principal">
         <a class="nav-link" href="#projeto">Portfólio</a>
         <a class="nav-link" href="#sobre">Sobre mim</a>
-        <a class="nav-link" href="#avaliacoes">Avaliações</a>
+        <a class="nav-link" href="#destaques">Destaques</a>
         <a class="nav-link nav-contact" href="#contato">Contato</a>
       </nav>
     </div>
@@ -283,11 +306,12 @@
       <div><p class="about-copy">Transformo ideias e necessidades reais em sites marcantes, claros e fáceis de usar.</p><p class="about-rest">Sou João Kotnik. Trabalho com design e desenvolvimento web, unindo identidade visual, movimento e funcionalidade. De vitrines para negócios locais a sistemas para operações, busco criar experiências que façam sentido para quem usa.</p><div class="stack" aria-label="Tecnologias"><span>HTML & CSS</span><span>JavaScript</span><span>SQL</span><span>Supabase</span><span>Git & GitHub</span><span>Design responsivo</span></div></div>
     </section>
 
-    <section id="avaliacoes" class="container reviews" aria-labelledby="avaliacoes-titulo">
-      <div class="reviews-heading"><div><span class="eyebrow" id="reviews-kicker">Prévia ilustrativa</span><h2 id="avaliacoes-titulo">Avaliações.</h2></div><p id="reviews-intro">Exemplos de como os depoimentos aparecerão. Estes comentários ainda não são avaliações de clientes reais.</p></div>
-      <div class="reviews-layout">
-        <div class="rating-summary" aria-label="Resumo das avaliações"><span class="rating-summary-label" id="rating-label">Média ilustrativa</span><strong class="rating-score"><span id="rating-value">0.0</span><small>/ 10.0</small></strong><div class="rating-summary-bottom"><span class="rating-stars is-empty" id="rating-stars" aria-hidden="true">☆☆☆☆☆</span><span class="rating-count" id="rating-count">0 avaliações</span></div></div>
-        <div class="reviews-list" id="reviews-list"><div class="reviews-empty"><span class="reviews-empty-symbol" aria-hidden="true">✧ ✧ ✧</span><h3>Espaço para experiências reais.</h3><p>Os comentários de clientes aparecerão aqui assim que forem adicionados.</p></div></div>
+    <section id="destaques" class="container section project-highlights" aria-labelledby="destaques-titulo">
+      <div class="highlights-heading"><div><span class="eyebrow">Recursos em destaque</span><h2 id="destaques-titulo">Na prática<span class="dot">.</span></h2></div><p>Detalhes dos projetos que aproximam cada interface da sua função.</p></div>
+      <div class="highlights-grid">
+        <article class="highlight-card"><div class="highlight-top"><span class="highlight-number">01</span><span class="highlight-kind">SISTEMA WEB</span></div><span class="highlight-project">Consulta Regiões</span><h3>Informação em um só lugar.</h3><p>Busca de regiões por bairro e organização das rotas para apoiar a rotina de coletas.</p><div class="highlight-tags"><span>Consulta por bairro</span><span>Gestão de rotas</span></div><a href="https://kkotnikk.github.io/consulta-regioes/" target="_blank" rel="noopener noreferrer">Explorar o sistema <span aria-hidden="true">↗</span></a></article>
+        <article class="highlight-card"><div class="highlight-top"><span class="highlight-number">02</span><span class="highlight-kind">CARDÁPIO DIGITAL</span></div><span class="highlight-project">Padoca do Bairro</span><h3>O cardápio ganha espaço.</h3><p>Uma apresentação para explorar o cardápio, conhecer a padaria e encontrar contato e localização.</p><div class="highlight-tags"><span>Exploração do cardápio</span><span>Contato e localização</span></div><a href="https://padoca-do-bairro.batatabarbuda.chatgpt.site" target="_blank" rel="noopener noreferrer">Explorar o site <span aria-hidden="true">↗</span></a></article>
+        <article class="highlight-card"><div class="highlight-top"><span class="highlight-number">03</span><span class="highlight-kind">VITRINE DIGITAL</span></div><span class="highlight-project">Embalagens Sabrina</span><h3>Produtos com direção.</h3><p>Uma vitrine para embalagens, festas e confeitaria, com caminhos claros para descobrir produtos e fazer pedidos.</p><div class="highlight-tags"><span>Produtos em destaque</span><span>Caminhos para pedidos</span></div><a href="https://github.com/kkotnikk/embalagens-sabrina-" target="_blank" rel="noopener noreferrer">Conhecer o projeto <span aria-hidden="true">↗</span></a></article>
       </div>
     </section>
 
@@ -328,7 +352,7 @@
     } else openingScene.hidden = true;
     const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (!motionPreference.matches && 'IntersectionObserver' in window) {
-      const animated = document.querySelectorAll('.section-head, .project, .case-item, .about-copy, .about-rest, .stack, .next-card, .reviews-heading, .rating-summary, .reviews-list, .contact .container');
+      const animated = document.querySelectorAll('.section-head, .project, .case-item, .about-copy, .about-rest, .stack, .next-card, .highlights-heading, .highlight-card, .contact .container');
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (!entry.isIntersecting) return;
@@ -340,66 +364,6 @@
       document.documentElement.classList.add('motion-ready');
     }
     document.getElementById('ano').textContent = new Date().getFullYear();
-    // Add approved, real testimonials here. Once present, examples disappear.
-    const avaliacoesReais = [];
-    const exemplosIlustrativos = [
-      {empresa:'Empresa exemplo 01', estrelas:5, comentario:'O site ficou claro, rápido e fácil de usar. O processo foi cuidadoso desde o primeiro contato até a entrega.'},
-      {empresa:'Empresa exemplo 02', estrelas:5, comentario:'Nossas necessidades foram entendidas e transformadas em uma interface simples para a equipe trabalhar no dia a dia.'},
-      {empresa:'Empresa exemplo 03', estrelas:5, comentario:'A comunicação foi objetiva, os ajustes foram ágeis e o resultado ficou ótimo no computador e no celular.'}
-    ];
-    const usandoExemplos = avaliacoesReais.length === 0;
-    const avaliacoes = usandoExemplos ? exemplosIlustrativos : avaliacoesReais;
-    const reviewsList = document.getElementById('reviews-list');
-    const approvedReviews = avaliacoes.filter(item =>
-      typeof item.empresa === 'string' && item.empresa.trim() &&
-      typeof item.comentario === 'string' && item.comentario.trim() &&
-      Number.isInteger(item.estrelas) && item.estrelas >= 1 && item.estrelas <= 5
-    );
-    const average = approvedReviews.length ? approvedReviews.reduce((sum, item) => sum + item.estrelas, 0) * 2 / approvedReviews.length : 0;
-    document.getElementById('rating-value').textContent = average.toFixed(1);
-    document.getElementById('rating-count').textContent = usandoExemplos ? `${approvedReviews.length} exemplos ilustrativos` : `${approvedReviews.length} ${approvedReviews.length === 1 ? 'avaliação' : 'avaliações'}`;
-    if (!usandoExemplos) {
-      document.getElementById('reviews-kicker').textContent = 'Feedback de clientes';
-      document.getElementById('reviews-intro').textContent = 'O que empresas que trabalharam comigo acharam dos projetos entregues.';
-      document.getElementById('rating-label').textContent = 'Média das avaliações';
-    }
-    const summaryStars = document.getElementById('rating-stars');
-    if (approvedReviews.length) {
-      const roundedStars = Math.round(average / 2);
-      summaryStars.textContent = '★'.repeat(roundedStars) + '☆'.repeat(5 - roundedStars);
-      summaryStars.classList.remove('is-empty');
-      reviewsList.replaceChildren();
-      approvedReviews.forEach(item => {
-        const card = document.createElement('article');
-        card.className = 'review-card';
-        const head = document.createElement('div');
-        head.className = 'review-card-head';
-        const companyBlock = document.createElement('div');
-        const label = document.createElement('span');
-        label.className = 'review-label';
-        label.textContent = usandoExemplos ? 'Empresa fictícia' : 'Empresa';
-        const company = document.createElement('h3');
-        company.className = 'review-company';
-        company.textContent = item.empresa;
-        companyBlock.append(label, company);
-        const stars = document.createElement('span');
-        stars.className = 'review-stars';
-        stars.textContent = '★'.repeat(item.estrelas) + '☆'.repeat(5 - item.estrelas);
-        stars.setAttribute('aria-label', `${item.estrelas} de 5 estrelas`);
-        head.append(companyBlock, stars);
-        const comment = document.createElement('p');
-        comment.className = 'review-comment';
-        comment.textContent = `“${item.comentario}”`;
-        card.append(head, comment);
-        if (usandoExemplos) {
-          const note = document.createElement('span');
-          note.className = 'review-demo-note';
-          note.textContent = 'Depoimento ilustrativo';
-          card.append(note);
-        }
-        reviewsList.append(card);
-      });
-    }
     let sectionScrollFrame = 0;
     let previousScrollBehavior = null;
     const stopSectionScroll = () => {
