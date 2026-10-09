@@ -249,6 +249,14 @@
     .feedback-action .btn{display:flex;justify-content:space-between;gap:24px}
     .feedback-action p{font:400 .75rem var(--font-mono);line-height:1.65;color:var(--muted);margin:14px 0 0}
     @media(max-width:850px){.feedback-invite{grid-template-columns:1fr;gap:28px;padding:28px}.feedback-action{max-width:100%}.feedback-action .btn{width:100%}.feedback-section .reviews-heading{gap:18px}}
+
+    .client-feedback-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-bottom:24px}
+    .client-feedback-card{display:flex;flex-direction:column;margin:0;padding:28px;border:1px solid #27414b;border-radius:14px;background:#0b151a}
+    .feedback-quote{font-family:Georgia,serif;font-size:3.8rem;line-height:.85;color:var(--detail);margin-bottom:18px}
+    .client-feedback-card blockquote{margin:0 0 26px}
+    .client-feedback-card blockquote p{font-size:1rem;line-height:1.75;color:#d0dbe0;margin:0;overflow-wrap:anywhere}
+    .client-feedback-card figcaption{font:500 .68rem var(--font-mono);line-height:1.6;letter-spacing:.04em;color:var(--muted);border-top:1px solid var(--line);padding-top:18px;margin-top:auto}
+    @media(max-width:900px){.client-feedback-grid{grid-template-columns:1fr}.client-feedback-card{padding:26px}}
   </style>
 </head>
 <body>
@@ -326,7 +334,12 @@
     </section>
 
     <section id="avaliacoes" class="container section feedback-section" aria-labelledby="avaliacoes-titulo">
-      <div class="reviews-heading"><div><span class="eyebrow">Sua experiência importa</span><h2 id="avaliacoes-titulo">Avaliações<span class="dot">.</span></h2></div><p>Já trabalhamos juntos? Conte como foi a experiência com o seu projeto.</p></div>
+      <div class="reviews-heading"><div><span class="eyebrow">Sua experiência importa</span><h2 id="avaliacoes-titulo">Avaliações<span class="dot">.</span></h2></div><p>Comentários recebidos pelo WhatsApp sobre os serviços prestados.</p></div>
+      <div class="client-feedback-grid" aria-label="Comentários de clientes">
+        <figure class="client-feedback-card"><span class="feedback-quote" aria-hidden="true">“</span><blockquote><p>entregou a nova tela de checkout dentro do prazo e com cobertura de testes unitários excelente. O código está limpo, bem documentado e seguiu perfeitamente os padrões de arquitetura do projeto.</p></blockquote><figcaption>Recebido pelo WhatsApp</figcaption></figure>
+        <figure class="client-feedback-card"><span class="feedback-quote" aria-hidden="true">“</span><blockquote><p>a interface ficou exatamente como planejamos. Um profissional excelente que recomendo de olhos fechados!</p></blockquote><figcaption>Recebido pelo WhatsApp</figcaption></figure>
+        <figure class="client-feedback-card"><span class="feedback-quote" aria-hidden="true">“</span><blockquote><p>Impressionado com o domínio técnico e a capacidade de resolver problemas complexos de forma simples.</p></blockquote><figcaption>Recebido pelo WhatsApp</figcaption></figure>
+      </div>
       <div class="feedback-invite">
         <div class="feedback-copy"><span class="feedback-label">FEEDBACK PELO WHATSAPP</span><h3>O próximo comentário pode ser o seu.</h3><p>Envie sua nota e conte o que achou do serviço. Seu feedback ajuda a melhorar cada nova entrega.</p></div>
         <div class="feedback-action"><a class="btn btn-primary" href="https://wa.me/5511996620129?text=Ol%C3%A1%2C%20Jo%C3%A3o!%20Quero%20avaliar%20seu%20servi%C3%A7o.%0A%0ANome%2Fempresa%3A%0AProjeto%20contratado%3A%0ANota%20de%200%20a%2010%3A%0AMeu%20coment%C3%A1rio%3A%0A%0AAutorizo%20a%20publica%C3%A7%C3%A3o%20do%20meu%20nome%2Fempresa%20e%20coment%C3%A1rio%20no%20portf%C3%B3lio%3A%20Sim%20%2F%20N%C3%A3o" target="_blank" rel="noopener noreferrer">Avalie meu serviço <span aria-hidden="true">↗</span></a><p>O botão abre uma mensagem pronta no WhatsApp.</p></div>
@@ -370,7 +383,7 @@
     } else openingScene.hidden = true;
     const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (!motionPreference.matches && 'IntersectionObserver' in window) {
-      const animated = document.querySelectorAll('.section-head, .project, .case-item, .about-copy, .about-rest, .stack, .next-card, .highlights-heading, .highlight-card, .reviews-heading, .feedback-invite, .contact .container');
+      const animated = document.querySelectorAll('.section-head, .project, .case-item, .about-copy, .about-rest, .stack, .next-card, .highlights-heading, .highlight-card, .reviews-heading, .client-feedback-card, .feedback-invite, .contact .container');
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (!entry.isIntersecting) return;
