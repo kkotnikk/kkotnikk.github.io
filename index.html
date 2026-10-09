@@ -137,7 +137,7 @@
     @media(max-width:600px){.reviews{padding-top:76px;padding-bottom:76px}.reviews-list{grid-template-columns:1fr}.reviews-empty{padding:28px;min-height:225px}.review-card{min-height:215px}.rating-summary{padding:26px}.nav .nav-link[href="#sobre"]{display:none}}
     @media(max-width:850px){.hero-side{overflow:hidden}.hero-side .cable-svg,.hero-side .card-eyelet{display:none}.swing-hint .hint-desktop{display:none}}
     @media(min-width:851px){.swing-hint .hint-mobile{display:none}}
-    @media(max-width:390px){.nav .nav-link[href="#sobre"]{display:none!important}.nav .nav-link[href="#destaques"]{display:inline-flex!important}}
+    @media(max-width:390px){.nav .nav-link[href="#sobre"]{display:none!important}.nav .nav-link[href="#avaliacoes"]{display:inline-flex!important}}
     @media(max-width:600px){.opening-title{font-size:clamp(2.1rem,8.5vw,3.4rem)}.opening-skip{font-size:.7rem}}
 
     /* Identidade Kotnik Studio: preto, branco, ciano e tipografia editorial. */
@@ -239,6 +239,16 @@
     .highlight-card a:focus-visible{outline:2px solid var(--detail);outline-offset:6px}
     @media(max-width:900px){.highlights-grid{grid-template-columns:1fr}.highlight-card{padding:26px}.highlights-heading{align-items:start;flex-direction:column;gap:18px}.highlights-heading p{max-width:500px}.highlight-card h3{font-size:2.3rem}}
     @media(prefers-reduced-motion:reduce){.highlight-card{transition:none}.highlight-card:hover{transform:none}}
+
+    .feedback-section{border-top:1px solid var(--line)}
+    .feedback-invite{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:40px;padding:40px;border:1px solid #27414b;border-radius:14px;background:#0b151a}
+    .feedback-label{font:500 .72rem var(--font-mono);letter-spacing:.07em;color:var(--detail)}
+    .feedback-copy h3{font-family:var(--font-display);font-size:clamp(2rem,3.5vw,3rem);font-weight:700;text-transform:uppercase;letter-spacing:0;line-height:1.1;margin:18px 0}
+    .feedback-copy p{max-width:560px;line-height:1.7;color:var(--muted);margin:0}
+    .feedback-action{max-width:270px}
+    .feedback-action .btn{display:flex;justify-content:space-between;gap:24px}
+    .feedback-action p{font:400 .75rem var(--font-mono);line-height:1.65;color:var(--muted);margin:14px 0 0}
+    @media(max-width:850px){.feedback-invite{grid-template-columns:1fr;gap:28px;padding:28px}.feedback-action{max-width:100%}.feedback-action .btn{width:100%}.feedback-section .reviews-heading{gap:18px}}
   </style>
 </head>
 <body>
@@ -250,7 +260,7 @@
       <nav class="nav" aria-label="Navegação principal">
         <a class="nav-link" href="#projeto">Portfólio</a>
         <a class="nav-link" href="#sobre">Sobre mim</a>
-        <a class="nav-link" href="#destaques">Destaques</a>
+        <a class="nav-link" href="#avaliacoes">Avaliações</a>
         <a class="nav-link nav-contact" href="#contato">Contato</a>
       </nav>
     </div>
@@ -315,6 +325,14 @@
       </div>
     </section>
 
+    <section id="avaliacoes" class="container section feedback-section" aria-labelledby="avaliacoes-titulo">
+      <div class="reviews-heading"><div><span class="eyebrow">Sua experiência importa</span><h2 id="avaliacoes-titulo">Avaliações<span class="dot">.</span></h2></div><p>Já trabalhamos juntos? Conte como foi a experiência com o seu projeto.</p></div>
+      <div class="feedback-invite">
+        <div class="feedback-copy"><span class="feedback-label">FEEDBACK PELO WHATSAPP</span><h3>O próximo comentário pode ser o seu.</h3><p>Envie sua nota e conte o que achou do serviço. Seu feedback ajuda a melhorar cada nova entrega.</p></div>
+        <div class="feedback-action"><a class="btn btn-primary" href="https://wa.me/5511996620129?text=Ol%C3%A1%2C%20Jo%C3%A3o!%20Quero%20avaliar%20seu%20servi%C3%A7o.%0A%0ANome%2Fempresa%3A%0AProjeto%20contratado%3A%0ANota%20de%200%20a%2010%3A%0AMeu%20coment%C3%A1rio%3A%0A%0AAutorizo%20a%20publica%C3%A7%C3%A3o%20do%20meu%20nome%2Fempresa%20e%20coment%C3%A1rio%20no%20portf%C3%B3lio%3A%20Sim%20%2F%20N%C3%A3o" target="_blank" rel="noopener noreferrer">Avalie meu serviço <span aria-hidden="true">↗</span></a><p>O botão abre uma mensagem pronta no WhatsApp.</p></div>
+      </div>
+    </section>
+
     <section id="contato" class="contact" aria-labelledby="contato-titulo"><div class="container"><span class="eyebrow">Contato</span><h2 id="contato-titulo">Vamos conversar sobre uma ideia?</h2><p>Para falar de projetos e oportunidades, entre em contato pelo canal que preferir.</p><div class="contact-methods"><a class="contact-card" href="mailto:joao.kotnik@gmail.com"><span>Email</span><strong>joao.kotnik@gmail.com</strong></a><a class="contact-card" href="tel:+5511996620129"><span>Telefone</span><strong>+55 11 99662-0129</strong></a></div><a class="btn" href="https://github.com/kkotnikk" target="_blank" rel="noopener noreferrer">Visitar meu GitHub</a></div></section>
   </main>
   <footer class="footer"><div class="container footer-inner"><span>© <span id="ano">2026</span> João Kotnik</span><span>Kotnik Studio · Design e desenvolvimento</span></div></footer>
@@ -352,7 +370,7 @@
     } else openingScene.hidden = true;
     const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (!motionPreference.matches && 'IntersectionObserver' in window) {
-      const animated = document.querySelectorAll('.section-head, .project, .case-item, .about-copy, .about-rest, .stack, .next-card, .highlights-heading, .highlight-card, .contact .container');
+      const animated = document.querySelectorAll('.section-head, .project, .case-item, .about-copy, .about-rest, .stack, .next-card, .highlights-heading, .highlight-card, .reviews-heading, .feedback-invite, .contact .container');
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (!entry.isIntersecting) return;
