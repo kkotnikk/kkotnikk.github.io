@@ -1,5 +1,6 @@
 import { env } from "cloudflare:workers";
-import { getPortalUser } from "../../../lib/course-auth";
+import { getPortalUser, trustedOrigin } from "../../../lib/course-auth";
+import { ticketUser } from "../../../lib/video-ticket";
 import { hasPaidAccess } from "../../../lib/payments";
 
 export const dynamic = "force-dynamic";
@@ -8,12 +9,12 @@ const MAX_BYTES = 80 * 1024 * 1024;
 const database = () => { if (!env.DB) throw new Error("Banco de dados indisponível."); return env.DB; };
 const bucket = () => { if (!env.BUCKET) throw new Error("Armazenamento indisponível."); return env.BUCKET; };
 const json = (body: unknown, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
-const sameOrigin = (request: Request) => request.headers.get("origin") === new URL(request.url).origin;
+const sameOrigin = trustedOrigin;
 
 export async function GET(request: Request) {
-  const user = await getPortalUser();
-  if (!user) return new Response(null, { status: 401 });
   const id = new URL(request.url).searchParams.get("id") || "";
+  const user = await getPortalUser() || await ticketUser(id, new URL(request.url).searchParams.get("ticket") || "");
+  if (!user) return new Response(null, { status: 401 });
   const lesson = await database().prepare("SELECT status,video_key FROM lessons WHERE id = ?")
     .bind(id).first<{ status: string; video_key: string | null }>();
   if (!lesson?.video_key) return new Response(null, { status: 404 });

@@ -1,8 +1,14 @@
 import { env } from "cloudflare:workers";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 export const OWNER_EMAIL = "joao.kotnik@gmail.com";
 export const SESSION_COOKIE = "jbb_session";
+export const PAGES_ORIGIN = "https://kkotnikk.github.io";
+export const PAGES_BASE = `${PAGES_ORIGIN}/jiu-jitsu-boladao`;
+export function trustedOrigin(request: Request) {
+  const origin = request.headers.get("origin");
+  return origin === new URL(request.url).origin || origin === PAGES_ORIGIN;
+}
 const encoder = new TextEncoder();
 
 export const database = () => { if (!env.DB) throw new Error("Banco de dados indisponível."); return env.DB; };
@@ -35,7 +41,8 @@ export async function cpfDigest(cpf: string) {
 }
 
 export async function getPortalUser() {
-  const token = (await cookies()).get(SESSION_COOKIE)?.value;
+  const bearer = (await headers()).get("authorization")?.match(/^Bearer ([a-f0-9]{64})$/)?.[1];
+  const token = bearer || (await cookies()).get(SESSION_COOKIE)?.value;
   if (!token || !/^[a-f0-9]{64}$/.test(token)) return null;
   return database().prepare("SELECT accounts.id AS userId, accounts.email, accounts.role FROM sessions JOIN accounts ON accounts.id = sessions.account_id WHERE sessions.token_hash = ? AND sessions.expires_at > ?")
     .bind(await sha256(token), Date.now()).first<{ userId: string; email: string; role: string }>();

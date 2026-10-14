@@ -1,5 +1,5 @@
 import { env } from "cloudflare:workers";
-import { getPortalUser } from "../../../lib/course-auth";
+import { getPortalUser, trustedOrigin } from "../../../lib/course-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -10,8 +10,7 @@ const bucket = () => { if (!env.BUCKET) throw new Error("Armazenamento indispon√
 const database = () => { if (!env.DB) throw new Error("Banco de dados indispon√≠vel."); return env.DB; };
 
 async function canEdit(request: Request) {
-  const origin = request.headers.get("origin");
-  if (!origin || origin !== new URL(request.url).origin) return false;
+  if (!trustedOrigin(request)) return false;
   const user = await getPortalUser();
   return user?.role === "professor";
 }

@@ -1,4 +1,4 @@
-import { getPortalUser, database } from "../../../lib/course-auth";
+import { PAGES_BASE, PAGES_ORIGIN, getPortalUser, database, trustedOrigin } from "../../../lib/course-auth";
 import { checkoutUrl, createCheckout, findLatestOrder, hasPaidAccess, paymentReady, syncOrder, type CourseOrder } from "../../../lib/payments";
 
 export const dynamic = "force-dynamic";
@@ -18,7 +18,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  if (request.headers.get("origin") !== new URL(request.url).origin) return json({ error: "Origem inválida." }, 403);
+  if (!trustedOrigin(request)) return json({ error: "Origem inválida." }, 403);
   const user = await getPortalUser();
   if (!user) return json({ error: "Entre na sua conta." }, 401);
   if (user.role === "professor" || await hasPaidAccess(user.userId)) return json({ error: "Esta conta já tem acesso." }, 409);
@@ -40,7 +40,8 @@ export async function POST(request: Request) {
     order = await findLatestOrder(user.userId);
   }
   try {
-    const url = await createCheckout(order as CourseOrder, user.email, new URL(request.url).origin);
+    const returnBase = request.headers.get("origin") === PAGES_ORIGIN ? PAGES_BASE : new URL(request.url).origin;
+    const url = await createCheckout(order as CourseOrder, user.email, returnBase);
     return json({ checkoutUrl: url, status: "pending" });
   } catch {
     return json({ error: "Não foi possível abrir o pagamento. Tente novamente." }, 503);

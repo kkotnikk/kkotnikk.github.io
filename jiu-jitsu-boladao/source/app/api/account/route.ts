@@ -1,6 +1,6 @@
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { brazilPhone, validCpf } from "../../../lib/account-validation";
-import { OWNER_EMAIL, SESSION_COOKIE, clearSessionCookie, cpfDigest, createSession, database, ensureProfessorAccount, getPortalUser, passwordHash, randomHex, sessionCookie, sha256 } from "../../../lib/course-auth";
+import { OWNER_EMAIL, PAGES_ORIGIN, SESSION_COOKIE, clearSessionCookie, cpfDigest, createSession, database, ensureProfessorAccount, getPortalUser, passwordHash, randomHex, sessionCookie, sha256, trustedOrigin } from "../../../lib/course-auth";
 
 export const dynamic = "force-dynamic";
 const json = (data: unknown, status = 200, cookie?: string) => Response.json(data, { status, headers: { "Cache-Control": "no-store", ...(cookie ? { "Set-Cookie": cookie } : {}) } });
@@ -27,7 +27,8 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  if (request.headers.get("origin") !== new URL(request.url).origin) return json({ error: "Origem inválida." }, 403);
+  if (!trustedOrigin(request)) return json({ error: "Origem inválida." }, 403);
+  const fromPages = request.headers.get("origin") === PAGES_ORIGIN;
   let body: Record<string, unknown>;
   try {
     const raw = await request.text();
@@ -41,7 +42,7 @@ export async function POST(request: Request) {
   const ip = request.headers.get("cf-connecting-ip") || "unknown";
   const ipKey = "ip:" + await sha256(ip);
   if (action === "logout") {
-    const token = (await cookies()).get(SESSION_COOKIE)?.value;
+    const token = (await headers()).get("authorization")?.match(/^Bearer ([a-f0-9]{64})$/)?.[1] || (await cookies()).get(SESSION_COOKIE)?.value;
     if (token) await database().prepare("DELETE FROM sessions WHERE token_hash = ?").bind(await sha256(token)).run();
     return json({ ok: true }, 200, clearSessionCookie());
   }
@@ -60,7 +61,7 @@ export async function POST(request: Request) {
         .bind(id, email, salt, hash, phone, digest, "student", new Date().toISOString()).run();
     } catch { return json({ error: "Não foi possível criar a conta. Confira os dados ou entre com sua conta." }, 409); }
     const token = await createSession(id);
-    return json({ ok: true, message: "Conta criada. Escolha o curso e conclua o pagamento.", redirect: "/site.html?entrar=aluno" }, 200, sessionCookie(token));
+    return json({ ok: true, message: "Conta criada. Escolha o curso e conclua o pagamento.", redirect: "/site.html?entrar=aluno", ...(fromPages ? { token } : {}) }, 200, sessionCookie(token));
   }
   if (action === "login") {
     if (!emailValid(email) || !password) return json({ error: "Informe e-mail e senha." }, 400);
@@ -75,7 +76,7 @@ export async function POST(request: Request) {
     }
     await database().prepare("DELETE FROM login_attempts WHERE key = ?").bind(key).run();
     const token = await createSession(account.id);
-    return json({ ok: true, redirect: "/site.html?entrar=aluno" }, 200, sessionCookie(token));
+    return json({ ok: true, redirect: "/site.html?entrar=aluno", ...(fromPages ? { token } : {}) }, 200, sessionCookie(token));
   }
   if (action === "password") {
     const reset = String(body.reset || "");

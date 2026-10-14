@@ -1,5 +1,5 @@
 import { env } from "cloudflare:workers";
-import { ensureProfessorAccount, getPortalUser, randomHex, sha256 } from "../../../lib/course-auth";
+import { PAGES_BASE, PAGES_ORIGIN, ensureProfessorAccount, getPortalUser, randomHex, sha256, trustedOrigin } from "../../../lib/course-auth";
 import { hasPaidAccess, paymentReady } from "../../../lib/payments";
 
 export const dynamic = "force-dynamic";
@@ -38,8 +38,7 @@ async function context() {
   return { user, admin, enrolled: await hasPaidAccess(user.userId) };
 }
 function sameOrigin(request: Request) {
-  const origin = request.headers.get("origin");
-  return !!origin && origin === new URL(request.url).origin;
+  return trustedOrigin(request);
 }
 export async function GET() {
   await ensureProfessorAccount();
@@ -110,7 +109,8 @@ export async function POST(request: Request) {
     await database().prepare("DELETE FROM reset_tokens WHERE account_id = ?").bind(account.id).run();
     await database().prepare("INSERT INTO reset_tokens (token_hash,account_id,expires_at) VALUES (?,?,?)")
       .bind(await sha256(token), account.id, Date.now() + 3600_000).run();
-    return json({ ok: true, link: `${new URL(request.url).origin}/conta?redefinir=${token}` });
+    const base = request.headers.get("origin") === PAGES_ORIGIN ? PAGES_BASE : new URL(request.url).origin;
+    return json({ ok: true, link: `${base}/conta/?redefinir=${token}` });
   }
   if (action === "lesson") {
     const title = String(body.title || "").trim(), module = String(body.module || ""), status = String(body.status || "");

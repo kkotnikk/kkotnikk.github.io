@@ -1,9 +1,7 @@
 # Jiu-Jitsu Boladão
 
-O código completo da aplicação está na pasta [source](./source). Ela inclui a interface, contas, aulas, painel do professor, integração de pagamento, banco de dados e arquivos visuais.
+[Site no GitHub Pages](https://kkotnikk.github.io/jiu-jitsu-boladao/) · [Código completo](./source)
 
-**Site funcional:** https://jiu-jitsu-boladao-modelo-2.batatabarbuda.chatgpt.site/site.html
+A interface completa, incluindo área do aluno, aulas e painel do professor, é publicada neste GitHub Pages. As rotas de conta, vídeos, banco de dados e pagamento são executadas no servidor hospedado em Sites; o endereço visível da interface permanece em `kkotnikk.github.io`.
 
-GitHub Pages não executa as rotas de servidor usadas por contas, vídeos e pagamentos. Por isso, a página deste diretório abre a aplicação publicada. O código-fonte fica aqui no GitHub para manutenção e versionamento.
-
-Para executar localmente, instale as dependências com `npm ci` dentro de `source` e configure as integrações e variáveis de ambiente do projeto antes de iniciar com `npm run dev`.
+O código completo do servidor e da interface está em `source/`. O arquivo `source/scripts/export-pages.py` gera a versão estática da interface para Pages. Para executar localmente, configure as integrações e variáveis de ambiente, instale com `npm ci` e inicie com `npm run dev` dentro de `source/`.
