@@ -1,0 +1,1 @@
+ALTER TABLE `lessons` ADD `published_at` text;
